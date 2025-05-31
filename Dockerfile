@@ -1,41 +1,25 @@
-# Stage 1: Base runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-
-# Set working directory
-WORKDIR /app
-
-# Only expose port 8081 (remove 8080)
-EXPOSE 8081
-
-# Stage 2: Build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
-# Set build configuration
-ARG BUILD_CONFIGURATION=Release
-
-# Set working directory
 WORKDIR /src
 
-# Copy the .csproj and restore dependencies
-COPY ["user-service/user-service.csproj", "user-service/"]
-RUN dotnet restore "user-service/user-service.csproj"
+# Copy the project file and restore dependencies
+COPY *.csproj .
+RUN dotnet restore
 
-# Copy everything and build
+# Copy the rest of the application code
 COPY . .
-WORKDIR "/src/user-service"
-RUN dotnet build "user-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Stage 3: Publish the application
-FROM build AS publish
-RUN dotnet publish "user-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Build the application
+RUN dotnet publish -c Release -o /app/publish
 
-# Stage 4: Final image
-FROM base AS final
-
+# Use the official .NET 8 runtime image to run the application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Copy published files
-COPY --from=publish /app/publish .
+# Copy the published application from the build stage
+COPY --from=build /app/publish .
 
-# Start the app
+# Expose the port your application will run on
+EXPOSE 8081
+
+# Set the entry point for the container
 ENTRYPOINT ["dotnet", "user-service.dll"]
