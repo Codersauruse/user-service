@@ -8,4 +8,5 @@ public interface IAppUserService
     public  Task<AppUser> GetUserById(int userId);
 
     public Task<AppUser> Register(AppUserRequest userDetails);
+    public Task<bool> validateUserById(int userId);
 }

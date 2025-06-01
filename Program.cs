@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Steeltoe.Discovery.Client;
 using user_service.MiddleWares;
 using user_service.Models;
 using user_service.Repository;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IAppUserRepo, AppUserRepo>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDiscoveryClient(builder.Configuration);
 
 var app = builder.Build();
 

@@ -6,4 +6,5 @@ public interface IAppUserRepo{
 
 Task<AppUser> findByUserId(int userId);
 Task<AppUser> register(AppUser user);
+Task<bool> validateUserById(int userId);
 }

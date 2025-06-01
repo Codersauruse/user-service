@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using user_service.Models;
 using user_service.Repository.interfaces;
 
@@ -22,5 +23,11 @@ public class AppUserRepo : IAppUserRepo
         _context.AppUsers.Add(user);
         _context.SaveChanges();
         return Task.FromResult(user).Result;
+    }
+
+    public  async Task<bool> validateUserById(int userId)
+    {
+        bool result = await _context.AppUsers.AnyAsync(b => b.id == userId);
+        return result;
     }
 }

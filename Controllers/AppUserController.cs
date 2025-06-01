@@ -4,7 +4,7 @@ using user_service.Service.interfaces;
 
 namespace user_service.Controllers;
 [ApiController]
-[Route("/api/user/")]
+[Route("/api/user")]
 public class AppUserController :ControllerBase
 {
     private readonly IAppUserService _appUserService;
@@ -28,6 +28,13 @@ public class AppUserController :ControllerBase
         }
         var user = await  _appUserService.Register(userDetails);
         return Ok(user);
+    }
+    
+    [HttpGet("/validateUser/{userId}")]
+    public async Task<IActionResult> validateUserById(int userId)
+    {
+        var result = await  _appUserService.validateUserById(userId);
+        return Ok(result);
     }
     
 }

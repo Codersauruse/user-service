@@ -37,4 +37,9 @@ public class AppUserService : IAppUserService
         };
         return _appUserRepo.register(user);
     }
+
+    public async Task<bool> validateUserById(int userId)
+    {
+        return await _appUserRepo.validateUserById(userId);
+    }
 }
