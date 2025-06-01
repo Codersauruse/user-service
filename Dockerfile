@@ -19,7 +19,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Expose the port your application will run on
-EXPOSE 8081
+EXPOSE 5089
 
 # Set the entry point for the container
 ENTRYPOINT ["dotnet", "user-service.dll"]
