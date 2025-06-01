@@ -1,23 +1,25 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy the project file and restore dependencies
+COPY *.csproj .
+RUN dotnet restore
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the application
+RUN dotnet publish -c Release -o /app/publish
+
+# Use the official .NET 8 runtime image to run the application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-EXPOSE 8080
+
+# Copy the published application from the build stage
+COPY --from=build /app/publish .
+
+# Expose the port your application will run on
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["user-service/user-service.csproj", "user-service/"]
-RUN dotnet restore "user-service/user-service.csproj"
-COPY . .
-WORKDIR "/src/user-service"
-RUN dotnet build "./user-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./user-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Set the entry point for the container
 ENTRYPOINT ["dotnet", "user-service.dll"]
