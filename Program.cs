@@ -9,6 +9,13 @@ using user_service.Service.interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5089); // Listen on port 5089
+});
+
+
+
 // Add services to the container.
 // 🔌 Add MySQL + DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
