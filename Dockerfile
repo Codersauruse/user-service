@@ -1,6 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-# Set environment to Development so Swagger is enabled
-ENV ASPNETCORE_ENVIRONMENT=Development
+
 
 WORKDIR /src
 
@@ -22,7 +21,8 @@ WORKDIR /app
 
 # Copy the published application from the build stage
 COPY --from=build /app/publish .
-
+# Set environment to Development so Swagger is enabled
+ENV ASPNETCORE_ENVIRONMENT=Development
 # Expose the port your application will run on
 EXPOSE 5089
 
