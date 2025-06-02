@@ -42,7 +42,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsProduction()) // OR use a custom flag for Docker env
+{
+    app.UseHttpsRedirection(); // enable HTTPS in local dev, not in Docker
+}
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
