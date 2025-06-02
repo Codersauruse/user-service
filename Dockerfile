@@ -1,4 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Set environment to Development so Swagger is enabled
+ENV ASPNETCORE_ENVIRONMENT=Development
+
 WORKDIR /src
 
 # Copy the project file and restore dependencies
@@ -15,8 +18,7 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-# Set environment to Development so Swagger is enabled
-ENV ASPNETCORE_ENVIRONMENT=Development
+
 
 # Copy the published application from the build stage
 COPY --from=build /app/publish .
@@ -25,4 +27,4 @@ COPY --from=build /app/publish .
 EXPOSE 5089
 
 # Set the entry point for the container
-ENTRYPOINT ["dotnet", "user-service.dll"]
+ENTRYPOINT ["dotnet", "user-service.dll","--environmnt=Development"]
