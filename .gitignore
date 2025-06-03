@@ -1,7 +1,7 @@
 # .NET build outputs
 bin/
 obj/
-Migrations
+
 Properties
 appsettings.json
 appsettings.Development.json
