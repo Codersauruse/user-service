@@ -4,7 +4,7 @@ using user_service.Service.interfaces;
 
 namespace user_service.Controllers;
 [ApiController]
-[Route("/api/user")]
+[Route("api/user/")]
 public class AppUserController :ControllerBase
 {
     private readonly IAppUserService _appUserService;
@@ -12,14 +12,14 @@ public class AppUserController :ControllerBase
     {
         _appUserService = appUserService;
     }
-    [HttpGet("/getUser/{userId}")]
+    [HttpGet("getUser/{userId}")]
     public async Task<IActionResult> GetUserById(int userId)
     {
         var user = await  _appUserService.GetUserById(userId);
         return Ok(user);
     }
     
-    [HttpPost("/register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] AppUserRequest userDetails)
     {
         if (!ModelState.IsValid)
@@ -30,7 +30,7 @@ public class AppUserController :ControllerBase
         return Ok(user);
     }
     
-    [HttpGet("/validateUser/{userId}")]
+    [HttpGet("validateUser/{userId}")]
     public async Task<IActionResult> validateUserById(int userId)
     {
         var result = await  _appUserService.validateUserById(userId);
